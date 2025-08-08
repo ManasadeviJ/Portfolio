@@ -1,0 +1,26 @@
+.card {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.1);
+  height: var(--card-height);
+}
+.card-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(193, 18, 31, 0.7);
+  color: var(--white);
+  padding: 40px;
+  height: var(--initial-visible-card-height);
+  transition: all 0.3s;
+}
+.card-link:hover .card-details {
+  height: 100%;
+  background: var(--white);
+}
