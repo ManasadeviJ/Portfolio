@@ -34,12 +34,6 @@
   </script>
 
   <style>
-    /* Custom Scrollbar for Horizontal Section */
-    .horizontal-scroll-container::-webkit-scrollbar { height: 8px; }
-    .horizontal-scroll-container::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
-    .horizontal-scroll-container::-webkit-scrollbar-thumb { background-color: #06b6d4; border-radius: 10px; border: 2px solid #1e293b; }
-    .horizontal-scroll-container { scrollbar-color: #06b6d4 #1e293b; scrollbar-width: thin; }
-
     /* Typing Animation */
     .typing::after { content: '|'; color: #06b6d4; animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0; } }
@@ -47,13 +41,28 @@
     /* Prevent body scroll when modal is open */
     .modal-open { overflow: hidden; }
 
-    /* ADDED: Flip Card Styles */
+    /* Flip Card Styles */
     .flip-card { perspective: 1000px; }
     .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
     .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
     .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 0.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 1.5rem; }
     .flip-card-front { background-color: #1e293b; border: 1px solid #334155; }
     .flip-card-back { background-color: #0891b2; color: white; transform: rotateY(180deg); }
+
+    /* 3D Skills Carousel Animation */
+    .skill-card {
+      transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+      transform-style: preserve-3d;
+    }
+
+    /* --- ADDED: Utility to hide scrollbars --- */
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none; /* For Chrome, Safari, and Opera */
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;  /* For IE and Edge */
+      scrollbar-width: none;  /* For Firefox */
+    }
   </style>
 </head>
 <body class="bg-slate-900 text-slate-300 font-sans">
@@ -102,11 +111,12 @@
         <div class="md:col-span-2 text-center md:text-left">
           <h2 class="text-3xl font-mono font-bold text-white mb-4">// About Me</h2>
           <p class="text-slate-400 text-lg leading-relaxed">
-            I'm a third-year CSE student who loves bringing ideas to life through code. With a strong foundation in full-stack development and a keen eye for user experience, I focus on creating digital products that are not only functional and robust but also intuitive and beautiful to use.
+            I'm a Final-year CSE student who loves bringing ideas to life through code. With a strong foundation in full-stack development and a keen eye for user experience, I focus on creating digital products that are not only functional and robust but also intuitive and beautiful to use.
           </p>
         </div>
       </div>
     </section>
+    
     <!-- Projects Section with Horizontal Scroll -->
     <section id="projects" class="py-24 px-6" data-aos="fade-up">
         <div class="max-w-7xl mx-auto">
@@ -114,22 +124,16 @@
               <h2 class="text-3xl font-mono font-bold text-white">// Projects</h2>
               <p class="text-slate-400 hidden md:block">Scroll to explore →</p>
             </div>
-            <div class="flex gap-8 pb-8 overflow-x-auto snap-x snap-mandatory horizontal-scroll-container">
+            <!-- ADDED hide-scrollbar class -->
+            <div class="flex gap-8 pb-4 overflow-x-auto snap-x snap-mandatory hide-scrollbar">
                 <!-- Project 1 -->
                 <div class="snap-start flex-shrink-0 w-80 md:w-96 bg-slate-800 border border-slate-700 rounded-lg shadow-lg overflow-hidden">
                     <img src="images/complaintcampusimage.webp" alt="Project 1" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-white mb-2">CampusComplaints</h3>
                         <p class="text-slate-400 mb-4 text-sm">A secure complaint management system for students to anonymously submit and track complaints. Developed with auth, status tracking, and admin dashboard features.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Express JS</span>
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Node.js</span>
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">MySQL</span>
-                        </div>
-                        <div class="flex gap-4 mt-auto">
-                            <!-- <a href="#" class="text-cyan-400 hover:underline font-semibold">Live <i class="fas fa-external-link-alt ml-1"></i></a> -->
-                            <a href="https://github.com/ManasadeviJ/CampusComplaints.git" class="text-cyan-400 hover:underline font-semibold">GitHub <i class="fab fa-github ml-1"></i></a>
-                        </div>
+                        <div class="flex flex-wrap gap-2 mb-4"><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Express JS</span><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Node.js</span><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">MySQL</span></div>
+                        <div class="flex gap-4 mt-auto"><a href="https://github.com/ManasadeviJ/CampusComplaints.git" class="text-cyan-400 hover:underline font-semibold">GitHub <i class="fab fa-github ml-1"></i></a></div>
                     </div>
                 </div>
                 <!-- Project 2 -->
@@ -138,47 +142,28 @@
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-white mb-2">SpiceScript</h3>
                         <p class="text-slate-400 mb-4 text-sm">A web-based platform for sharing, viewing, and submitting recipes categorized by type. .</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Express JS</span>
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Node.js</span>
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">MySQL</span>
-                        </div>
-                        <div class="flex gap-4 mt-auto">
-                            <!-- <a href="#" class="text-cyan-400 hover:underline font-semibold">Live <i class="fas fa-external-link-alt ml-1"></i></a> -->
-                            <a href="#" class="text-cyan-400 hover:underline font-semibold">GitHub <i class="fab fa-github ml-1"></i></a>
-                        </div>
+                        <div class="flex flex-wrap gap-2 mb-4"><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Express JS</span><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Node.js</span><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">MySQL</span></div>
+                        <div class="flex gap-4 mt-auto"><a href="#" class="text-cyan-400 hover:underline font-semibold">GitHub <i class="fab fa-github ml-1"></i></a></div>
                     </div>
                 </div>
                 <!-- Project 3 -->
                 <div class="snap-start flex-shrink-0 w-80 md:w-96 bg-slate-800 border border-slate-700 rounded-lg shadow-lg overflow-hidden">
                     <img src="images/c" alt="Project 3" class="w-full h-48 object-cover">
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-white mb-2">Project Name Three</h3>
-                        <p class="text-slate-400 mb-4 text-sm">A brief, compelling description of what this project does and the problem it solves.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Python</span>
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Flask</span>
-                        </div>
-                        <div class="flex gap-4 mt-auto">
-                            <!-- <a href="#" class="text-cyan-400 hover:underline font-semibold">Live <i class="fas fa-external-link-alt ml-1"></i></a> -->
-                            <a href="#" class="text-cyan-400 hover:underline font-semibold">GitHub <i class="fab fa-github ml-1"></i></a>
-                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Where Did I ?</h3>
+                        <p class="text-slate-400 mb-4 text-sm"> A voice-first mobile app that helps you remember where you left your items. It uses on-device Speech-to-Text and Geofencing to log locations and send proactive alerts if you leave something behind.</p>
+                        <div class="flex flex-wrap gap-2 mb-4"><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Flutter</span><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Hive</span></div>
+                        <div class="flex gap-4 mt-auto"><a href="#" class="text-cyan-400 hover:underline font-semibold">GitHub <i class="fab fa-github ml-1"></i></a></div>
                     </div>
                 </div>
-                <!-- Project 3 -->
+                <!-- Project 4 -->
                 <div class="snap-start flex-shrink-0 w-80 md:w-96 bg-slate-800 border border-slate-700 rounded-lg shadow-lg overflow-hidden">
-                    <img src="images/c" alt="Project 3" class="w-full h-48 object-cover">
+                    <img src="images/c" alt="Project 4" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-white mb-2">Project Name Three</h3>
                         <p class="text-slate-400 mb-4 text-sm">A brief, compelling description of what this project does and the problem it solves.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Python</span>
-                            <span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Flask</span>
-                        </div>
-                        <div class="flex gap-4 mt-auto">
-                            <!-- <a href="#" class="text-cyan-400 hover:underline font-semibold">Live <i class="fas fa-external-link-alt ml-1"></i></a> -->
-                            <a href="#" class="text-cyan-400 hover:underline font-semibold">GitHub <i class="fab fa-github ml-1"></i></a>
-                        </div>
+                        <div class="flex flex-wrap gap-2 mb-4"><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Python</span><span class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Flask</span></div>
+                        <div class="flex gap-4 mt-auto"><a href="#" class="text-cyan-400 hover:underline font-semibold">GitHub <i class="fab fa-github ml-1"></i></a></div>
                     </div>
                 </div>
             </div>
@@ -186,35 +171,139 @@
     </section>
 
     <!-- Professional Experience -->
-    <section id="experience" class="py-24 px-6" data-aos="fade-up"><div class="max-w-3xl mx-auto"><h2 class="text-3xl font-mono font-bold text-center text-white mb-12">// Experience</h2><div class="relative pl-8 before:absolute before:top-0 before:left-0 before:h-full before:w-0.5 before:bg-slate-700"><div class="relative mb-12" data-aos="fade-left"><div class="absolute -left-11 top-1 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900 ring-4 ring-cyan-500/30"></div><div class="bg-slate-800 p-6 rounded-lg border border-slate-700"><p class="text-sm text-cyan-400">June 2025 - Present</p><h3 class="text-xl font-semibold text-white mt-1">Full Stack Developer - Luxury In Taste (LIT)</h3><p class="mt-2 text-slate-400">Developed a high-performance, responsive website, focusing on a luxury user experience and robust back-end integrations.</p></div></div><div class="relative mb-12" data-aos="fade-left" data-aos-delay="100"><div class="absolute -left-11 top-1 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900"></div><div class="bg-slate-800 p-6 rounded-lg border border-slate-700"><p class="text-sm text-cyan-400">Jan 2025 - Feb 2025</p><h3 class="text-xl font-semibold text-white mt-1">Cybersecurity Intern - Edunet Foundation (AICTE)</h3><p class="mt-2 text-slate-400">Gained hands-on experience in network security and ethical hacking. Analyzed case studies to understand and mitigate security vulnerabilities.</p></div></div><div class="relative mb-12" data-aos="fade-left" data-aos-delay="200"><div class="absolute -left-11 top-1 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900"></div><div class="bg-slate-800 p-6 rounded-lg border border-slate-700"><p class="text-sm text-cyan-400">Dec 2024 - Feb 2025</p><h3 class="text-xl font-semibold text-white mt-1">UI/UX Intern - Cothon Solutions</h3><p class="mt-2 text-slate-400">Contributed to designing user-friendly interfaces, created wireframes, and conducted user research to improve web application usability.</p></div></div></div></div></section>
+    <section id="experience" class="py-24 px-6" data-aos="fade-up"><div class="max-w-3xl mx-auto"><h2 class="text-3xl font-mono font-bold text-center text-white mb-12">// Experience</h2><div class="relative pl-8 before:absolute before:top-0 before:left-0 before:h-full before:w-0.5 before:bg-slate-700"><div class="relative mb-12" data-aos="fade-left"><div class="absolute -left-11 top-1 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900 ring-4 ring-cyan-500/30"></div><div class="bg-slate-800 p-6 rounded-lg border border-slate-700"><p class="text-sm text-cyan-400">June 2025 - Aug 2025</p><h3 class="text-xl font-semibold text-white mt-1">Full Stack Developer - Luxury In Taste (LIT)</h3><p class="mt-2 text-slate-400">Developed a high-performance, responsive website, focusing on a luxury user experience and robust back-end integrations.</p></div></div><div class="relative mb-12" data-aos="fade-left" data-aos-delay="100"><div class="absolute -left-11 top-1 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900"></div><div class="bg-slate-800 p-6 rounded-lg border border-slate-700"><p class="text-sm text-cyan-400">Jan 2025 - Feb 2025</p><h3 class="text-xl font-semibold text-white mt-1">Cybersecurity Intern - Edunet Foundation (AICTE)</h3><p class="mt-2 text-slate-400">Gained hands-on experience in network security and ethical hacking. Analyzed case studies to understand and mitigate security vulnerabilities.</p></div></div><div class="relative mb-12" data-aos="fade-left" data-aos-delay="200"><div class="absolute -left-11 top-1 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900"></div><div class="bg-slate-800 p-6 rounded-lg border border-slate-700"><p class="text-sm text-cyan-400">Dec 2024 - Feb 2025</p><h3 class="text-xl font-semibold text-white mt-1">UI/UX Intern - Cothon Solutions</h3><p class="mt-2 text-slate-400">Contributed to designing user-friendly interfaces, created wireframes, and conducted user research to improve web application usability.</p></div></div></div></div></section>
     
-    <!-- Skills Section -->
-    <section id="skills" class="py-24 px-6" data-aos="fade-up"><div class="max-w-4xl mx-auto"><h2 class="text-3xl font-mono font-bold text-center text-white mb-12">// Tech Stack</h2><div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center"><div class="bg-slate-800 p-6 rounded-lg flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-cyan-500 transition-colors"><i class="fab fa-react text-cyan-400 text-5xl"></i><p class="font-medium text-white mt-2">React</p></div><div class="bg-slate-800 p-6 rounded-lg flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-cyan-500 transition-colors"><i class="fab fa-node-js text-green-400 text-5xl"></i><p class="font-medium text-white mt-2">Node.js</p></div><div class="bg-slate-800 p-6 rounded-lg flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-cyan-500 transition-colors"><i class="fab fa-js text-yellow-300 text-5xl"></i><p class="font-medium text-white mt-2">JavaScript</p></div><div class="bg-slate-800 p-6 rounded-lg flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-cyan-500 transition-colors"><i class="fas fa-database text-green-500 text-5xl"></i><p class="font-medium text-white mt-2">MongoDB</p></div><div class="bg-slate-800 p-6 rounded-lg flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-cyan-500 transition-colors"><i class="fab fa-html5 text-orange-400 text-5xl"></i><p class="font-medium text-white mt-2">HTML5</p></div><div class="bg-slate-800 p-6 rounded-lg flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-cyan-500 transition-colors"><i class="fab fa-css3-alt text-blue-400 text-5xl"></i><p class="font-medium text-white mt-2">CSS3</p></div><div class="bg-slate-800 p-6 rounded-lg flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-cyan-500 transition-colors"><i class="fab fa-figma text-pink-500 text-5xl"></i><p class="font-medium text-white mt-2">Figma</p></div><div class="bg-slate-800 p-6 rounded-lg flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-cyan-500 transition-colors"><i class="fab fa-git-alt text-red-500 text-5xl"></i><p class="font-medium text-white mt-2">Git</p></div></div></div></section>
+<!-- Skills Section with 3D Carousel (COMPLETE) -->
+<section id="skills" class="py-24 px-6">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-mono font-bold text-center text-white mb-12">// Tech Stack</h2>
+    
+    <!-- Horizontal Scroll 3D Slider -->
+    <div id="skills-slider" class="flex gap-4 md:gap-2 overflow-x-auto pb-4 [perspective:1000px] hide-scrollbar">
+      
+      <!-- HTML -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-html5 text-orange-400 text-6xl"></i>
+        <p class="font-medium text-white mt-2">HTML5</p>
+      </div>
 
-    <!-- ADDED: Certifications Section -->
+      <!-- CSS -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-css3-alt text-blue-400 text-6xl"></i>
+        <p class="font-medium text-white mt-2">CSS3</p>
+      </div>
+
+      <!-- JavaScript -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-js text-yellow-300 text-6xl"></i>
+        <p class="font-medium text-white mt-2">JavaScript (ES6+)</p>
+      </div>
+
+      <!-- Java -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-java text-red-400 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Java</p>
+      </div>
+
+      <!-- React -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-react text-cyan-400 text-6xl"></i>
+        <p class="font-medium text-white mt-2">React.js</p>
+      </div>
+
+      <!-- Node.js -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-node-js text-green-400 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Node.js</p>
+      </div>
+
+      <!-- Express.js -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fas fa-server text-purple-400 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Express.js</p>
+      </div>
+
+      <!-- SQL -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fas fa-database text-yellow-400 text-6xl"></i>
+        <p class="font-medium text-white mt-2">SQL</p>
+      </div>
+
+      <!-- MongoDB -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fas fa-database text-green-500 text-6xl"></i>
+        <p class="font-medium text-white mt-2">MongoDB</p>
+      </div>
+
+      <!-- REST APIs -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fas fa-plug text-cyan-300 text-6xl"></i>
+        <p class="font-medium text-white mt-2">REST APIs</p>
+      </div>
+
+      <!-- Cloud (Azure) -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fas fa-cloud text-blue-300 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Microsoft Azure</p>
+      </div>
+
+      <!-- Agile -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fas fa-project-diagram text-pink-400 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Agile</p>
+      </div>
+
+      <!-- Git -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-git-alt text-red-500 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Git</p>
+      </div>
+
+      <!-- GitHub -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-github text-gray-300 text-6xl"></i>
+        <p class="font-medium text-white mt-2">GitHub</p>
+      </div>
+
+      <!-- Postman -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fas fa-paper-plane text-orange-300 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Postman</p>
+      </div>
+
+      <!-- Figma -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-figma text-pink-500 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Figma</p>
+      </div>
+
+      <!-- Adobe Illustrator -->
+      <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fas fa-paint-brush text-yellow-300 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Illustrator</p>
+      </div>
+
+      
+
+      <!-- Python -->
+      <!-- <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+        <i class="fab fa-python text-yellow-400 text-6xl"></i>
+        <p class="font-medium text-white mt-2">Python (Basics)</p>
+      </div> -->
+
+    </div>
+  </div>
+</section>
+
+
+    <!-- Certifications Section -->
     <section id="certifications" class="py-24 px-6" data-aos="fade-up">
       <h2 class="text-3xl font-mono font-bold text-center text-white mb-12">// Certifications</h2>
       <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="flip-card h-64">
-          <div class="flip-card-inner">
-            <div class="flip-card-front"><i class="fab fa-js text-yellow-300 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">JS Algorithms & Data Structures</h3><p class="text-slate-400 mt-2">freeCodeCamp</p></div>
-            <div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in 2025</h4><p class="mt-2 text-sm">Mastered fundamental algorithms and data structures in JavaScript.</p><a href="#" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div>
-          </div>
-        </div>
-        <div class="flip-card h-64">
-          <div class="flip-card-inner">
-            <div class="flip-card-front"><i class="fas fa-mobile-alt text-cyan-400 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">Responsive Web Design</h3><p class="text-slate-400 mt-2">freeCodeCamp</p></div>
-            <div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in 2025</h4><p class="mt-2 text-sm">Built mobile-first layouts using Flexbox, Grid, and modern CSS techniques.</p><a href="#" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div>
-          </div>
-        </div>
-        <div class="flip-card h-64">
-          <div class="flip-card-inner">
-            <div class="flip-card-front"><i class="fas fa-shield-alt text-red-500 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">Intro to Cybersecurity</h3><p class="text-slate-400 mt-2">Cisco</p></div>
-            <div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in 2025</h4><p class="mt-2 text-sm">Gained foundational knowledge of security principles and threat mitigation.</p>
-                <a href="certificates/cbc-sert.pdf" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div>
-                
-          </div>
-        </div>
+        <div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front"><i class="fab fa-js text-yellow-300 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">The Full Stack Web Development Bootcamp</h3><p class="text-slate-400 mt-2">Udemy</p></div><div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in August 2025</h4><p class="mt-2 text-sm">The Full Stack Web Development Bootcamp</p><a href="certificates/udemy-fullstack.pdf.crdownload" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div></div></div>
+        <div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-mobile-alt text-cyan-400 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">Cybersecurity Fundamentals</h3><p class="text-slate-400 mt-2">IBM SkillsBuild</p></div><div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in Feb, 2025</h4><p class="mt-2 text-sm">Cybersecurity Fundamentals</p><a href="https://www.credly.com/badges/947b99ce-fcee-4d33-886d-6fa9214f7d45/public_url" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div></div></div>
+        <div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-shield-alt text-red-500 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">Intro to Cybersecurity</h3><p class="text-slate-400 mt-2">Cisco</p></div><div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in 2025</h4><p class="mt-2 text-sm">Gained foundational knowledge of security principles and threat mitigation.</p><a href="certificates/I2CSUpdate20250808-33-ax4ph1.pdf" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div></div></div>
+        <div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-shield-alt text-red-500 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">Microsoft - Publish Azure Static Web Page</h3><p class="text-slate-400 mt-2">Microsoft</p></div><div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in 2025</h4><p class="mt-2 text-sm">Published and hosted a static web page using Microsoft Azure services.</p><a href="https://learn.microsoft.com/api/achievements/share/en-us/Manasadevi-3509/D9FFZXCJ?sharingId=783FA67D93D0644B" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div></div></div>
       </div>
     </section>
 
@@ -224,27 +313,9 @@
 
   <!-- Resume Modal -->
   <div id="resume-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-300"><div class="bg-slate-800 border border-slate-700 rounded-lg shadow-xl w-11/12 max-w-4xl h-5/6 flex flex-col relative"><div class="flex justify-between items-center p-4 border-b border-slate-700 flex-shrink-0"><h3 class="font-mono text-lg text-white">Resume</h3><div class="flex items-center gap-4"><a href="Manasadevi-CV.pdf" download class="px-4 py-2 bg-cyan-500 text-slate-900 font-semibold rounded-md hover:bg-cyan-400 transition-colors text-sm"><i class="fas fa-download mr-2"></i>Download</a><button id="close-modal-btn" class="text-slate-400 hover:text-white text-2xl" title="Close">×</button></div></div><div class="flex-grow p-1"><iframe id="resume-iframe" class="w-full h-full" src=""></iframe></div></div></div>
-<!-- Footer -->
-<footer class="text-slate-400 py-10 px-6">
-  <div class="max-w-7xl mx-auto text-center">
-    <div class="flex justify-center gap-6 mb-4">
-      <a href="https://github.com/ManasadeviJ" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors">
-        <i class="fab fa-github"></i>
-      </a>
-      <a href="https://linkedin.com/in/mdj08" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors">
-        <i class="fab fa-linkedin"></i>
-      </a>
-      <a href="https://www.geeksforgeeks.org/user/manasadrsd7/" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors">
-        <i class="fas fa-code"></i>
-      </a>
-      <a href="https://leetcode.com/Manasadevi_J/" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors">
-        <i class="fas fa-laptop-code"></i>
-      </a>
-    </div>
-    <p class="font-mono text-sm">Designed & Built by Manasadevi J</p>
-  </div>
-</footer>
-
+  
+  <!-- Footer -->
+  <footer class="text-slate-400 py-10 px-6"><div class="max-w-7xl mx-auto text-center"><div class="flex justify-center gap-6 mb-4"><a href="https://github.com/ManasadeviJ" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors"><i class="fab fa-github"></i></a><a href="https://linkedin.com/in/mdj08" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors"><i class="fab fa-linkedin"></i></a><a href="https://www.geeksforgeeks.org/user/manasadrsd7/" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors"><i class="fas fa-code"></i></a><a href="https://leetcode.com/Manasadevi_J/" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors"><i class="fas fa-laptop-code"></i></a></div><p class="font-mono text-sm">Designed & Built by Manasadevi J</p></div></footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
@@ -253,6 +324,28 @@
       once: true,
     });
 
+    // --- 3D Skills Carousel Functionality ---
+    const slider = document.getElementById('skills-slider');
+    const cards = document.querySelectorAll('.skill-card');
+    function animateSkillsOnScroll() {
+      const sliderRect = slider.getBoundingClientRect();
+      const sliderCenter = sliderRect.left + sliderRect.width / 2;
+      cards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const distanceFromCenter = cardCenter - sliderCenter;
+        const maxDistance = sliderRect.width / 2;
+        const rotation = (distanceFromCenter / maxDistance) * -25;
+        // IMPROVED: Enhanced scaling effect
+        const scale = 1 - Math.abs(distanceFromCenter / maxDistance) * 0.2; // Shrinks to 80%
+        const opacity = 1 - Math.abs(distanceFromCenter / maxDistance) * 0.4;
+        card.style.transform = `rotateY(${rotation}deg) scale(${scale})`;
+        card.style.opacity = `${opacity}`;
+      });
+    }
+    slider.addEventListener('scroll', () => { window.requestAnimationFrame(animateSkillsOnScroll); });
+    window.addEventListener('load', () => { setTimeout(animateSkillsOnScroll, 100); });
+
     // --- Resume Modal Functionality ---
     const resumeLinkBtn = document.getElementById('resume-link-btn');
     const resumeModal = document.getElementById('resume-modal');
@@ -260,11 +353,8 @@
     const resumeIframe = document.getElementById('resume-iframe');
     const resumePath = 'Manasadevi-CV.pdf'; 
     const body = document.body;
-
     function openModal() {
-        if (resumeIframe.src !== resumePath) {
-            resumeIframe.src = resumePath;
-        }
+        if (resumeIframe.src !== resumePath) { resumeIframe.src = resumePath; }
         resumeModal.classList.remove('hidden');
         body.classList.add('modal-open');
     }
@@ -274,12 +364,8 @@
     }
     resumeLinkBtn.addEventListener('click', openModal);
     closeModalBtn.addEventListener('click', closeModal);
-    resumeModal.addEventListener('click', (event) => {
-        if (event.target === resumeModal) closeModal();
-    });
-    window.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && !resumeModal.classList.contains('hidden')) closeModal();
-    });
+    resumeModal.addEventListener('click', (event) => { if (event.target === resumeModal) closeModal(); });
+    window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !resumeModal.classList.contains('hidden')) closeModal(); });
   </script>
 </body>
 </html>
