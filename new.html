@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manasadevi J | Creative Technologist</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- AOS Library for Animations -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="main.css"/>
+
+  <script>
+    // Custom Tailwind Config for new fonts
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Typing Animation */
+    .typing::after { content: '|'; color: #06b6d4; animation: blink 1s infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    
+    /* Prevent body scroll when modal is open */
+    .modal-open { overflow: hidden; }
+
+    /* Flip Card Styles */
+    .flip-card { perspective: 1000px; }
+    .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
+    .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 0.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 1.5rem; }
+    .flip-card-front { background-color: #1e293b; border: 1px solid #334155; }
+    .flip-card-back { background-color: #0891b2; color: white; transform: rotateY(180deg); }
+
+    /* 3D Skills Carousel Animation */
+    .skill-card {
+      transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+      transform-style: preserve-3d;
+    }
+
+    /* --- ADDED: Utility to hide scrollbars --- */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ===========================
+       CHROMA GRID (Projects)
+       - Radius 20
+       - Centered grid
+       - 4/3/1 responsive columns
+       - Full image background
+       - Gradient footer
+       - Spotlight + blur mask
+       =========================== */
+
+    .chroma-grid {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      /* We’ll control the number of columns via --cols for 4/3/1 */
+      grid-template-columns: repeat(var(--cols, 4), 320px);
+      grid-auto-rows: auto;
+      justify-content: center; /* center the fixed-width columns */
+      gap: 0.75rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem;
+      box-sizing: border-box;
+
+      --x: 50%;
+      --y: 50%;
+      --r: 220px;
+    }
+
+    /* Breakpoints: <768 = 1 col, 768–1023 = 3 cols, 1024+ = 4 cols */
+    @media (max-width: 767.98px) {
+      .chroma-grid { --cols: 1; }
+    }
+    @media (min-width: 768px) and (max-width: 1023.98px) {
+      .chroma-grid { --cols: 3; }
+    }
+    @media (min-width: 1024px) {
+      .chroma-grid { --cols: 4; }
+    }
+
+    .chroma-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 320px;           /* fixed like original component */
+      height: 320px;          /* square so the background image fills nicely */
+      border-radius: 20px;    /* radius 20 as requested */
+      overflow: hidden;
+      border: 1px solid #333;
+      transition: border-color 0.3s ease, transform 0.15s ease;
+      background: #000; /* fallback under layers */
+
+      --mouse-x: 50%;
+      --mouse-y: 50%;
+      --spotlight-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .chroma-card:hover { border-color: var(--card-border); transform: translateY(-6px); }
+
+    /* Spotlight on card */
+    .chroma-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 3;
+    }
+    .chroma-card:hover::before { opacity: 1; }
+
+    /* Full image background layer */
+    .chroma-card-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+      filter: brightness(0.60);
+    }
+
+    /* Project gradient overlay ABOVE the image */
+    .chroma-gradient {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      /* Use your per-card CSS variable gradient */
+      background: var(--card-gradient);
+      opacity: 0.85; /* tweak if you want more/less gradient */
+      pointer-events: none;
+    }
+
+    /* Footer with bottom fade so text sits on gradient nicely */
+    .chroma-info {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      z-index: 2;
+      padding: 0.9rem 1rem 1.0rem;
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.55) 45%, rgba(0,0,0,0) 100%);
+    }
+
+    .chroma-info .name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 0.35rem 0;
+    }
+    .chroma-info .role {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      margin: 0 0 0.6rem 0;
+    }
+
+    .tech-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tech-stack span {
+      display: inline-block;
+      background: rgba(0, 255, 200, 0.15);
+      color: #3ce6e6;
+      font-size: 0.68rem;
+      padding: 0.22rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(60, 230, 230, 0.25);
+    }
+
+    /* Global overlay that follows the cursor across the grid */
+    .chroma-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+      backdrop-filter: grayscale(1) brightness(0.78);
+      -webkit-backdrop-filter: grayscale(1) brightness(0.78);
+      background: rgba(0, 0, 0, 0.001);
+
+      mask-image: radial-gradient(
+        circle var(--r) at var(--x) var(--y),
+        transparent 0%,
+        transparent 15%,
+        rgba(0, 0, 0, 0.1) 30%,
+        rgba(0, 0, 0, 0.22) 45%,
+        rgba(0, 0, 0, 0.35) 60%,
+        rgba(0, 0, 0, 0.5) 75%,
+        rgba(0, 0, 0, 0.68) 88%,
+        white 100%
+      );
+      -webkit-mask-image: radial-gradient(
+        circle var(--r) at var(--x) var(--y),
+        transparent 0%,
+        transparent 15%,
+        rgba(0, 0, 0, 0.1) 30%,
+        rgba(0, 0, 0, 0.22) 45%,
+        rgba(0, 0, 0, 0.35) 60%,
+        rgba(0, 0, 0, 0.5) 75%,
+        rgba(0, 0, 0, 0.68) 88%,
+        white 100%
+      );
+    }
+
+    .chroma-fade {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+      backdrop-filter: grayscale(1) brightness(0.78);
+      -webkit-backdrop-filter: grayscale(1) brightness(0.78);
+      background: rgba(0, 0, 0, 0.001);
+
+      mask-image: radial-gradient(
+        circle var(--r) at var(--x) var(--y),
+        white 0%,
+        white 15%,
+        rgba(255, 255, 255, 0.9) 30%,
+        rgba(255, 255, 255, 0.78) 45%,
+        rgba(255, 255, 255, 0.65) 60%,
+        rgba(255, 255, 255, 0.5) 75%,
+        rgba(255, 255, 255, 0.32) 88%,
+        transparent 100%
+      );
+      -webkit-mask-image: radial-gradient(
+        circle var(--r) at var(--x) var(--y),
+        white 0%,
+        white 15%,
+        rgba(255, 255, 255, 0.9) 30%,
+        rgba(255, 255, 255, 0.78) 45%,
+        rgba(255, 255, 255, 0.65) 60%,
+        rgba(255, 255, 255, 0.5) 75%,
+        rgba(255, 255, 255, 0.32) 88%,
+        transparent 100%
+      );
+
+      opacity: 1;
+      transition: opacity 0.25s ease;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-300 font-sans">
+
+  <!-- Header & Navbar -->
+  <header class="bg-slate-900/70 backdrop-blur-md sticky top-0 z-40 border-b border-slate-700">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="#" class="text-2xl font-mono font-bold text-white">M.J</a>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#about" class="text-slate-300 hover:text-cyan-400 transition-colors">About</a>
+          <a href="#projects" class="text-slate-300 hover:text-cyan-400 transition-colors">Projects</a>
+          <a href="#experience" class="text-slate-300 hover:text-cyan-400 transition-colors">Experience</a>
+          <a href="#skills" class="text-slate-300 hover:text-cyan-400 transition-colors">Skills</a>
+          <a href="#certifications" class="text-slate-300 hover:text-cyan-400 transition-colors">Certifications</a>
+          <button id="resume-link-btn" class="text-slate-300 hover:text-cyan-400 transition-colors">Resume</button>
+          <a href="#contact" class="px-4 py-2 bg-cyan-500 text-slate-900 font-semibold rounded-md hover:bg-cyan-400 transition-colors">Contact</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-6">
+      <div data-aos="fade-up">
+        <h1 class="text-4xl md:text-6xl font-bold text-slate-100 leading-tight">
+            I build things for the web.
+        </h1>
+        <h2 class="mt-4 text-5xl md:text-7xl font-bold bg-gradient-to-r from-cyan-400 to-sky-500 bg-clip-text text-transparent">
+            Manasadevi J.
+        </h2>
+        <p class="mt-6 text-lg md:text-xl text-slate-400 typing">Full-Stack Developer & Cloud Enthusiast.</p>
+        <div class="mt-10 flex justify-center gap-4">
+          <a href="#projects" class="px-8 py-3 bg-cyan-500 text-slate-900 rounded-lg font-bold hover:bg-cyan-400 transition-transform hover:scale-105 shadow-lg shadow-cyan-500/20">View My Work</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-6" data-aos="fade-up">
+      <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-12 items-center">
+        <div class="md:col-span-1 flex justify-center">
+          <img src="MANASADEVI J.JPG" alt="Profile of Manasadevi J" class="w-48 h-48 md:w-60 md:h-60 object-cover rounded-full shadow-2xl shadow-cyan-500/20">
+        </div>
+        <div class="md:col-span-2 text-center md:text-left">
+          <h2 class="text-3xl font-mono font-bold text-white mb-4">// About Me</h2>
+          <p class="text-slate-400 text-lg leading-relaxed">
+             I am a Full Stack Developer with experience in Java and building scalable web applications and digital platforms. I have a keen interest in cloud computing and enjoy creating efficient, user-friendly solutions. I love solving real-world problems through technology.
+          </p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- =======================
+         Projects Section (Updated)
+         ======================= -->
+    <section id="projects" class="py-24 px-6" data-aos="fade-up">
+        <h2 class="text-3xl font-mono font-bold text-center text-white mb-12">// Projects</h2>
+      <div class="max-w-7xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+    
+          <!-- <p class="text-slate-400 hidden md:block">Hover and explore →</p> -->
+        </div>
+
+        <div class="chroma-grid" aria-label="Project Cards Grid">
+          <!-- Project 1 -->
+          
+        <article class="chroma-card" data-url="https://github.com/ManasadeviJ/CampusComplaints.git"
+        style="--card-border:#00d4ff;" data-aos="fade-up">
+        <div class="chroma-card-bg" style="background-image:url('images/complaintcampusimage.webp')"></div>
+        <footer class="chroma-info">
+            <h3>CampusComplaints</h3>
+            <p>A secure platform for students to submit and track complaints anonymously.</p>
+            <div class="tech-stack">
+            <span>Node.js</span><span>Express.js</span><span>MySQL</span>
+            </div>
+        </footer>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="chroma-card" data-url="https://github.com/ManasadeviJ/SpiceScript.git"
+        style="--card-border:#32bf84;" data-aos="fade-up" data-aos-delay="100">
+        <div class="chroma-card-bg" style="background-image:url('images/spicescriptimage.avif')"></div>
+        <footer class="chroma-info">
+            <h3>SpiceScript</h3>
+            <p>Explore and share recipes with a categorized web experience.</p>
+            <div class="tech-stack">
+            <span>Express.js</span><span>Node.js</span><span>MySQL</span>
+            </div>
+        </footer>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="chroma-card" data-url="https://github.com/ManasadeviJ/Train-Bogie-Management-Simulator.git"
+        style="--card-border:#f56565;" data-aos="fade-up" data-aos-delay="200">
+        <div class="chroma-card-bg" style="background-image:url('images/Gemini_Generated_Image_9ieh6o9ieh6o9ieh.png')"></div>
+        <footer class="chroma-info">
+            <h3>Train Bogie Management</h3>
+            <p>Simulates bogie merge and detachment logic for superfast trains.</p>
+            <div class="tech-stack">
+            <span>Java</span><span>Command-line</span>
+            </div>
+        </footer>
+        </article>
+
+        <!-- Project 4 -->
+        <article class="chroma-card" data-url="https://github.com/ManasadeviJ/JDBC-Book-Recommendation-System"
+        style="--card-border:#d59cf0;" data-aos="fade-up" data-aos-delay="300">
+        <div class="chroma-card-bg" style="background-image:url('images/book_recommendation_system.png')"></div>
+        <footer class="chroma-info">
+            <h3>Book Recommendation System</h3>
+            <p>Console-based system to add books, rate and recommend via JDBC.</p>
+            <div class="tech-stack">
+            <span>Java</span><span>JDBC</span><span>MySQL</span>
+            </div>
+        </footer>
+        </article>
+
+          
+
+
+          <!-- Spotlight/Fade layers -->
+          <div class="chroma-overlay"></div>
+          <div class="chroma-fade"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Professional Experience -->
+    <section id="experience" class="py-24 px-6" data-aos="fade-up"><div class="max-w-3xl mx-auto"><h2 class="text-3xl font-mono font-bold text-center text-white mb-12">// Experience</h2><div class="relative pl-8 before:absolute before:top-0 before:left-0 before:h-full before:w-0.5 before:bg-slate-700"><div class="relative mb-12" data-aos="fade-left"><div class="absolute -left-11 top-1 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900 ring-4 ring-cyan-500/30"></div><div class="bg-slate-800 p-6 rounded-lg border border-slate-700"><p class="text-sm text-cyan-400">June 2025 - Aug 2025</p><h3 class="text-xl font-semibold text-white mt-1">Full Stack Developer - Luxury In Taste (LIT)</h3><p class="mt-2 text-slate-400">Developed a high-performance, responsive website, focusing on a luxury user experience and robust back-end integrations.</p></div></div><div class="relative mb-12" data-aos="fade-left" data-aos-delay="100"><div class="absolute -left-11 top-1 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900"></div><div class="bg-slate-800 p-6 rounded-lg border border-slate-700"><p class="text-sm text-cyan-400">Jan 2025 - Feb 2025</p><h3 class="text-xl font-semibold text-white mt-1">Cybersecurity Intern - Edunet Foundation (AICTE)</h3><p class="mt-2 text-slate-400">Gained hands-on experience in network security and ethical hacking. Analyzed case studies to understand and mitigate security vulnerabilities.</p></div></div><div class="relative mb-12" data-aos="fade-left" data-aos-delay="200"><div class="absolute -left-11 top-1 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900"></div><div class="bg-slate-800 p-6 rounded-lg border border-slate-700"><p class="text-sm text-cyan-400">Dec 2024 - Feb 2025</p><h3 class="text-xl font-semibold text-white mt-1">UI/UX Intern - Cothon Solutions</h3><p class="mt-2 text-slate-400">Contributed to designing user-friendly interfaces, created wireframes, and conducted user research to improve web application usability.</p></div></div></div></div></section>
+    
+    <!-- Skills Section with 3D Carousel (COMPLETE) -->
+    <section id="skills" class="py-24 px-6">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl font-mono font-bold text-center text-white mb-12">// Tech Stack</h2>
+        
+        <!-- Horizontal Scroll 3D Slider -->
+        <div id="skills-slider" class="flex gap-4 md:gap-2 overflow-x-auto pb-4 [perspective:1000px] hide-scrollbar">
+          
+          <!-- HTML -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fab fa-html5 text-orange-400 text-6xl"></i>
+            <p class="font-medium text-white mt-2">HTML5</p>
+          </div>
+
+          <!-- CSS -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fab fa-css3-alt text-blue-400 text-6xl"></i>
+            <p class="font-medium text-white mt-2">CSS3</p>
+          </div>
+
+          <!-- JavaScript -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fab fa-js text-yellow-300 text-6xl"></i>
+            <p class="font-medium text-white mt-2">JavaScript (ES6+)</p>
+          </div>
+
+          <!-- Java -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fab fa-java text-red-400 text-6xl"></i>
+            <p class="font-medium text-white mt-2">Java</p>
+          </div>
+
+          <!-- JDBC -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fas fa-link text-yellow-400 text-6xl"></i>
+            <p class="font-medium text-white mt-2">JDBC</p>
+          </div>
+
+          <!-- React -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fab fa-react text-cyan-400 text-6xl"></i>
+            <p class="font-medium text-white mt-2">React.js</p>
+          </div>
+
+          <!-- Node.js -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fab fa-node-js text-green-400 text-6xl"></i>
+            <p class="font-medium text-white mt-2">Node.js</p>
+          </div>
+
+          <!-- Express.js -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fas fa-server text-purple-400 text-6xl"></i>
+            <p class="font-medium text-white mt-2">Express.js</p>
+          </div>
+
+          <!-- SQL -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fas fa-database text-yellow-400 text-6xl"></i>
+            <p class="font-medium text-white mt-2">SQL</p>
+          </div>
+
+          <!-- MongoDB -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fas fa-database text-green-500 text-6xl"></i>
+            <p class="font-medium text-white mt-2">MongoDB</p>
+          </div>
+
+          <!-- REST APIs -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fas fa-plug text-cyan-300 text-6xl"></i>
+            <p class="font-medium text-white mt-2">REST APIs</p>
+          </div>
+
+          <!-- Cloud (Azure) -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fas fa-cloud text-blue-300 text-6xl"></i>
+            <p class="font-medium text-white mt-2">Microsoft Azure</p>
+          </div>
+
+          <!-- Agile -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fas fa-project-diagram text-pink-400 text-6xl"></i>
+            <p class="font-medium text-white mt-2">Agile</p>
+          </div>
+
+          <!-- Git -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fab fa-git-alt text-red-500 text-6xl"></i>
+            <p class="font-medium text-white mt-2">Git</p>
+          </div>
+
+          <!-- GitHub -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fab fa-github text-gray-300 text-6xl"></i>
+            <p class="font-medium text-white mt-2">GitHub</p>
+          </div>
+
+          <!-- Postman -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fas fa-paper-plane text-orange-300 text-6xl"></i>
+            <p class="font-medium text-white mt-2">Postman</p>
+          </div>
+
+          <!-- Figma -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fab fa-figma text-pink-500 text-6xl"></i>
+            <p class="font-medium text-white mt-2">Figma</p>
+          </div>
+
+          <!-- Adobe Illustrator -->
+          <div class="skill-card flex-shrink-0 w-44 h-48 bg-slate-800 rounded-xl flex flex-col items-center justify-center gap-3 border border-slate-700 p-4">
+            <i class="fas fa-paint-brush text-yellow-300 text-6xl"></i>
+            <p class="font-medium text-white mt-2">Illustrator</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="py-24 px-6" data-aos="fade-up">
+      <h2 class="text-3xl font-mono font-bold text-center text-white mb-12">// Certifications</h2>
+      <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front"><i class="fab fa-js text-yellow-300 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">The Full Stack Web Development Bootcamp</h3><p class="text-slate-400 mt-2">Udemy</p></div><div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in August 2025</h4><p class="mt-2 text-sm">The Full Stack Web Development Bootcamp</p><a href="certificates/udemy-fullstack.pdf.crdownload" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div></div></div>
+        <div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-mobile-alt text-cyan-400 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">Cybersecurity Fundamentals</h3><p class="text-slate-400 mt-2">IBM SkillsBuild</p></div><div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in Feb, 2025</h4><p class="mt-2 text-sm">Cybersecurity Fundamentals</p><a href="https://www.credly.com/badges/947b99ce-fcee-4d33-886d-6fa9214f7d45/public_url" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div></div></div>
+        <div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-shield-alt text-red-500 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white">Intro to Cybersecurity</h3><p class="text-slate-400 mt-2">Cisco</p></div><div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in 2025</h4><p class="mt-2 text-sm">Gained foundational knowledge of security principles and threat mitigation.</p><a href="certificates/I2CSUpdate20250808-33-ax4ph1.pdf" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div></div></div>
+        <div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front"><i class="fab fa-microsoft text-blue-400 text-5xl mb-4"></i> <h3 class="text-xl font-bold text-white">Microsoft - Publish Azure Static Web Page</h3><p class="text-slate-400 mt-2">Microsoft</p></div><div class="flip-card-back"><h4 class="text-lg font-semibold text-white">Completed in 2025</h4><p class="mt-2 text-sm">Published and hosted a static web page using Microsoft Azure services.</p><a href="https://learn.microsoft.com/api/achievements/share/en-us/Manasadevi-3509/D9FFZXCJ?sharingId=783FA67D93D0644B" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate</a></div></div></div>
+        <!-- Oracle Cloud Infrastructure 2025 Foundations Associate Certification -->
+        <div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front flex flex-col items-center justify-center"><i class="fas fa-database text-red-500 text-5xl mb-4"></i><h3 class="text-xl font-bold text-white text-center">Oracle Cloud Infrastructure 2025 Foundations Associate</h3><p class="text-slate-400 mt-2 text-center">Oracle</p></div>
+            <div class="flip-card-back flex flex-col items-center justify-center">
+              <h4 class="text-lg font-semibold text-white text-center">Completed in 2025</h4>
+              <p class="mt-2 text-sm text-center">Oracle Cloud Infrastructure 2025 Foundations Associate (1Z0-1085-25)</p>
+              <a href="certificates/oracle-foundations.pdf" target="_blank" class="mt-4 font-semibold underline text-white hover:text-slate-200">View Certificate (PDF)</a>
+              <a href="https://catalog-education.oracle.com/pls/certview/sharebadge?id=205CE66E4826DE2A90FE2701B82138EE05BCD49A46F9966845D6EE46C398E1C4" target="_blank" class="mt-2 font-semibold underline text-white hover:text-slate-200">View Badge</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 px-6" data-aos="fade-up"><div class="max-w-xl mx-auto text-center"><h2 class="text-3xl font-mono font-bold text-white mb-4">// Get In Touch</h2><p class="text-slate-400 mb-8">My inbox is always open. Whether you have a question, a project proposal, or just want to say hi, I’ll get back to you!</p><a href="mailto:manasadevij08@gmail.com" class="inline-block px-8 py-4 border border-cyan-500 text-cyan-500 rounded-lg font-bold hover:bg-cyan-500/10 transition-colors">Say Hello</a></div></section>
+  </main>
+
+  <!-- Resume Modal -->
+  <div id="resume-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-300"><div class="bg-slate-800 border border-slate-700 rounded-lg shadow-xl w-11/12 max-w-4xl h-5/6 flex flex-col relative"><div class="flex justify-between items-center p-4 border-b border-slate-700 flex-shrink-0"><h3 class="font-mono text-lg text-white">Resume</h3><div class="flex items-center gap-4"><a href="Manasadevi-pharmeasy.pdf" download class="px-4 py-2 bg-cyan-500 text-slate-900 font-semibold rounded-md hover:bg-cyan-400 transition-colors text-sm"><i class="fas fa-download mr-2"></i>Download</a><button id="close-modal-btn" class="text-slate-400 hover:text-white text-2xl" title="Close">×</button></div></div><div class="flex-grow p-1"><iframe id="resume-iframe" class="w-full h-full" src=""></iframe></div></div></div>
+  
+  <!-- Footer -->
+  <footer class="text-slate-400 py-10 px-6"><div class="max-w-7xl mx-auto text-center"><div class="flex justify-center gap-6 mb-4"><a href="https://github.com/ManasadeviJ" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors"><i class="fab fa-github"></i></a><a href="https://linkedin.com/in/mdj08" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors"><i class="fab fa-linkedin"></i></a><a href="https://leetcode.com/Manasadevi_J/" target="_blank" class="text-2xl hover:text-cyan-400 transition-colors"><i class="fas fa-laptop-code"></i></a></div><p class="font-mono text-sm">Designed & Built by Manasadevi J</p></div></footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 750, once: true });
+
+    // --- 3D Skills Carousel Functionality ---
+    const slider = document.getElementById('skills-slider');
+    const cards = document.querySelectorAll('.skill-card');
+    function animateSkillsOnScroll() {
+      const sliderRect = slider.getBoundingClientRect();
+      const sliderCenter = sliderRect.left + sliderRect.width / 2;
+      cards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const distanceFromCenter = cardCenter - sliderCenter;
+        const maxDistance = sliderRect.width / 2;
+        const rotation = (distanceFromCenter / maxDistance) * -25;
+        const scale = 1 - Math.abs(distanceFromCenter / maxDistance) * 0.2;
+        const opacity = 1 - Math.abs(distanceFromCenter / maxDistance) * 0.4;
+        card.style.transform = `rotateY(${rotation}deg) scale(${scale})`;
+        card.style.opacity = `${opacity}`;
+      });
+    }
+    slider.addEventListener('scroll', () => { window.requestAnimationFrame(animateSkillsOnScroll); });
+    window.addEventListener('load', () => { setTimeout(animateSkillsOnScroll, 100); });
+
+    // --- Resume Modal Functionality ---
+    const resumeLinkBtn = document.getElementById('resume-link-btn');
+    const resumeModal = document.getElementById('resume-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const resumeIframe = document.getElementById('resume-iframe');
+    const resumePath = 'Manasadevi-pharmeasy.pdf'; 
+    const body = document.body;
+    function openModal() {
+        if (resumeIframe.src !== resumePath) { resumeIframe.src = resumePath; }
+        resumeModal.classList.remove('hidden');
+        body.classList.add('modal-open');
+    }
+    function closeModal() {
+        resumeModal.classList.add('hidden');
+        body.classList.remove('modal-open');
+    }
+    resumeLinkBtn.addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    resumeModal.addEventListener('click', (event) => { if (event.target === resumeModal) closeModal(); });
+    window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !resumeModal.classList.contains('hidden')) closeModal(); });
+
+    // --- ChromaGrid: click to GitHub ---
+    document.querySelectorAll('.chroma-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const url = card.getAttribute('data-url');
+        if (url) window.open(url, '_blank', 'noopener,noreferrer');
+      });
+    });
+
+    // --- ChromaGrid: spotlight & fade tracking across the grid ---
+    const grid = document.querySelector('.chroma-grid');
+    const fade = document.querySelector('.chroma-fade');
+
+    function setGridXY(x, y) {
+      grid.style.setProperty('--x', `${x}px`);
+      grid.style.setProperty('--y', `${y}px`);
+    }
+
+    grid.addEventListener('pointermove', (e) => {
+      const r = grid.getBoundingClientRect();
+      setGridXY(e.clientX - r.left, e.clientY - r.top);
+      if (fade) fade.style.opacity = 0;
+    });
+
+    grid.addEventListener('pointerleave', () => {
+      if (fade) fade.style.opacity = 1;
+    });
+
+    // Per-card spotlight (mouse position within each card)
+    document.querySelectorAll('.chroma-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+  </script>
+</body>
+</html>

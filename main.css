@@ -1,0 +1,88 @@
+/* Clean ChromaGrid — no dark overlay, no spotlight, no global mask */
+
+.chroma-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+  padding: 1.5rem;
+  justify-content: center;
+}
+
+/* Tablet (3 cards) */
+@media (max-width: 1024px) {
+  .chroma-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile (1 card) */
+@media (max-width: 768px) {
+  .chroma-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chroma-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.chroma-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--card-border);
+}
+
+/* Full image background, no dark filter */
+.chroma-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+/* Footer content stays readable */
+.chroma-info {
+  position: relative;
+  z-index: 2;
+  padding: 1rem 1.2rem;
+  background: rgba(0, 0, 0, 0.45); /* only behind text, not whole card */
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-family: system-ui, sans-serif;
+}
+
+.chroma-info h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.chroma-info p {
+  font-size: 0.9rem;
+  color: #e5e5e5;
+  margin-bottom: 0.6rem;
+}
+
+/* Tech tags */
+.tech-stack span {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  margin-right: 0.35rem;
+}
+
+/* Removed completely */
+.chroma-overlay,
+.chroma-fade,
+.chroma-card::before {
+  display: none !important;
+}
