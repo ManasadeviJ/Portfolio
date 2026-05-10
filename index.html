@@ -88,7 +88,7 @@
     <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-6">
       <div data-aos="fade-up">
         <h1 class="text-4xl md:text-6xl font-bold text-slate-100 leading-tight">
-            I build things for the web & data.
+            I build things for the data & web.
         </h1>
         <h2 class="mt-4 text-5xl md:text-7xl font-bold bg-gradient-to-r from-cyan-400 to-sky-500 bg-clip-text text-transparent">
             Manasadevi J.
@@ -145,6 +145,28 @@
                         </div>
                     </div>
                 </div>
+                <!-- NEW Project: Music Streaming Pipeline -->
+            <div class="snap-start flex-shrink-0 w-80 md:w-96 bg-slate-800 border border-cyan-700/40 rounded-lg shadow-lg shadow-cyan-500/10 overflow-hidden">
+                <div class="w-full h-48 bg-gradient-to-br from-cyan-900/60 to-slate-800 flex flex-col items-center justify-center gap-2">
+                  <i class="fas fa-music text-cyan-400 text-5xl"></i>
+                  <span class="text-xs font-mono text-cyan-400 bg-cyan-950 px-3 py-1 rounded-full border border-cyan-700">Data Engineering · Streaming</span>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-white mb-2">Music Streaming End-to-End Pipeline</h3>
+                    <p class="text-slate-400 mb-4 text-sm">Metadata-driven incremental ingestion using CDC/watermark logic and Logic Apps for failure alerts. Streaming events processed via Delta Live Tables and Autoloader. Diagnosed and resolved pipeline issues — duplicate loads, watermark drift, and empty file generation.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                      <span class="badge-de text-xs font-semibold px-2.5 py-0.5 rounded-full">Azure Data Factory</span>
+                      <span class="badge-de text-xs font-semibold px-2.5 py-0.5 rounded-full">Databricks</span>
+                      <span class="badge-de text-xs font-semibold px-2.5 py-0.5 rounded-full">PySpark</span>
+                      <span class="badge-de text-xs font-semibold px-2.5 py-0.5 rounded-full">Delta Live Tables</span>
+                      <span class="badge-de text-xs font-semibold px-2.5 py-0.5 rounded-full">ADLS Gen2</span>
+                      <span class="badge-de text-xs font-semibold px-2.5 py-0.5 rounded-full">Azure SQL</span>
+                    </div>
+                    <div class="flex gap-4 mt-auto">
+                      <a href="https://github.com/ManasadeviJ/azure-databricks-project" target="_blank" class="text-cyan-400 hover:underline font-semibold">GitHub <i class="fab fa-github ml-1"></i></a>
+                    </div>
+                </div>
+            </div>
 
                 <!-- NEW Project: Hackverse -->
                 <div class="snap-start flex-shrink-0 w-80 md:w-96 bg-slate-800 border border-indigo-700/40 rounded-lg shadow-lg shadow-indigo-500/10 overflow-hidden">
@@ -630,7 +652,7 @@
       <div class="flex justify-between items-center p-4 border-b border-slate-700 flex-shrink-0">
         <h3 class="font-mono text-lg text-white">Resume</h3>
         <div class="flex items-center gap-4">
-          <a href="ManasadeviJ_CV.pdf" download class="px-4 py-2 bg-cyan-500 text-slate-900 font-semibold rounded-md hover:bg-cyan-400 transition-colors text-sm"><i class="fas fa-download mr-2"></i>Download</a>
+          <a href="ManasadeviJ_DataEngineer_CV.pdf" download class="px-4 py-2 bg-cyan-500 text-slate-900 font-semibold rounded-md hover:bg-cyan-400 transition-colors text-sm"><i class="fas fa-download mr-2"></i>Download</a>
           <button id="close-modal-btn" class="text-slate-400 hover:text-white text-2xl" title="Close">×</button>
         </div>
       </div>
@@ -680,7 +702,7 @@
     const resumeModal = document.getElementById('resume-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
     const resumeIframe = document.getElementById('resume-iframe');
-    const resumePath = 'ManasadeviJ_CV.pdf';
+    const resumePath = 'ManasadeviJ_DataEngineer_CV.pdf';
     const body = document.body;
     function openModal() {
       if (resumeIframe.src !== resumePath) { resumeIframe.src = resumePath; }
